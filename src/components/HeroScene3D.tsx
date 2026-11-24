@@ -16,26 +16,26 @@ const MinimalStageRig: React.FC<{
 }> = ({ children, scrollProgress, dragAngles }) => {
   const stageRef = useRef<THREE.Group>(null);
   const { camera, size } = useThree();
-  const stageCenterX = 0.28;
-  const targetLookAt = useRef(new THREE.Vector3(stageCenterX, 1.04, -0.08));
+  const stageCenterX = 0.11;
+  const targetLookAt = useRef(new THREE.Vector3(stageCenterX, 1.28, -0.1));
 
   useFrame((state, delta) => {
     const dt = Math.min(delta, 0.05);
     const aspect = size.width / Math.max(size.height, 1);
 
-    // Exact frustum fit so the full lineup from Mario (left) to Golem & Skeletons (right) fits cleanly
-    const neededHalfWidth = 3.22;
+    // Exact frustum fit so +15% Dragon (-3.12m) to +15% Golem (+3.34m) & 2.84m height fit cleanly
+    const neededHalfWidth = 3.62;
     const vFovRad = THREE.MathUtils.degToRad(26);
     const hHalfTan = Math.tan(vFovRad / 2) * aspect;
     const minHorizontalFitZ = neededHalfWidth / Math.max(hHalfTan, 0.24);
-    const baseZ = Math.max(6.05, minHorizontalFitZ);
+    const baseZ = Math.max(6.85, minHorizontalFitZ);
 
     // Subtle, calm 3D camera parallax on pointer move + smooth 3D dolly on scroll
     const pointerX = state.pointer.x * 0.36;
     const pointerY = state.pointer.y * 0.14;
 
     const desiredX = stageCenterX + pointerX;
-    const desiredY = 1.08 + pointerY + scrollProgress * 0.35;
+    const desiredY = 1.3 + pointerY + scrollProgress * 0.35;
     const desiredZ = baseZ - scrollProgress * 0.7;
 
     camera.position.x = THREE.MathUtils.lerp(camera.position.x, desiredX, dt * 4);
@@ -43,7 +43,7 @@ const MinimalStageRig: React.FC<{
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, desiredZ, dt * 4);
 
     targetLookAt.current.lerp(
-      new THREE.Vector3(stageCenterX, 1.04 - scrollProgress * 0.25, -0.08),
+      new THREE.Vector3(stageCenterX, 1.28 - scrollProgress * 0.25, -0.1),
       dt * 5
     );
     camera.lookAt(targetLookAt.current);
@@ -102,7 +102,7 @@ export const HeroScene3D: React.FC<HeroSceneProps> = ({ scrollProgress }) => {
       <Canvas
         shadows
         dpr={[1, 2]}
-        camera={{ position: [0.28, 1.08, 6.05], fov: 26, near: 0.1, far: 30 }}
+        camera={{ position: [0.11, 1.3, 6.85], fov: 26, near: 0.1, far: 30 }}
         gl={{
           antialias: true,
           alpha: true,
@@ -114,17 +114,17 @@ export const HeroScene3D: React.FC<HeroSceneProps> = ({ scrollProgress }) => {
         <ambientLight intensity={1.2} color="#ffffff" />
         <hemisphereLight args={['#ffffff', '#f1f5f9', 0.75]} />
         <directionalLight
-          position={[2.6, 5.2, 5.0]}
+          position={[2.6, 5.5, 5.2]}
           intensity={1.3}
           color="#ffffff"
           castShadow
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
           shadow-camera-near={0.5}
-          shadow-camera-far={18}
-          shadow-camera-left={-4.2}
-          shadow-camera-right={4.6}
-          shadow-camera-top={3.6}
+          shadow-camera-far={20}
+          shadow-camera-left={-5.0}
+          shadow-camera-right={5.0}
+          shadow-camera-top={4.2}
           shadow-camera-bottom={-0.6}
           shadow-bias={-0.0004}
         />
@@ -133,11 +133,11 @@ export const HeroScene3D: React.FC<HeroSceneProps> = ({ scrollProgress }) => {
           <MinimalStageRig scrollProgress={scrollProgress} dragAngles={dragAngles}>
             {/* Invisible Pure-White Ground Plane Catching Subtle Studio Floor Contact Shadows */}
             <ContactShadows
-              position={[0.28, 0.001, -0.08]}
+              position={[0.11, 0.001, -0.1]}
               opacity={0.34}
-              scale={8.4}
+              scale={9.6}
               blur={2.4}
-              far={2.6}
+              far={3.0}
               resolution={512}
               color="#334155"
             />

@@ -94,6 +94,7 @@ const RigidWavingArm3D: React.FC<{
 };
 
 export const Character3DMesh: React.FC<Character3DMeshProps> = ({ character }) => {
+  const groupRef = useRef<THREE.Group>(null);
   const [colorTex, depthTex, normalTex] = useLoader(THREE.TextureLoader, [
     character.textureUrl,
     character.depthUrl,
@@ -131,8 +132,19 @@ export const Character3DMesh: React.FC<Character3DMeshProps> = ({ character }) =
 
   const meshCenterY = character.meshHeightM * 0.5 + character.soleOffsetM;
 
+  useFrame((state) => {
+    if (!character.floatingHover || !groupRef.current) return;
+    // Ultra-subtle, calm 1.2cm rigid hover for airborne Dragon (zero resizing, zero mesh bending)
+    groupRef.current.position.y =
+      character.position[1] + Math.sin(state.clock.elapsedTime * 1.5) * 0.012;
+  });
+
   return (
-    <group position={character.position} rotation={[0, character.rotationY, 0]}>
+    <group
+      ref={groupRef}
+      position={character.position}
+      rotation={[character.rotationX ?? 0, character.rotationY, character.rotationZ ?? 0]}
+    >
       {/* Primary Crisp 3D Relief Mesh — Rock-solid grounded scale, zero rubber warping */}
       <mesh
         position={[0, meshCenterY, 0]}

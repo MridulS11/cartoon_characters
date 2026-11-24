@@ -26,6 +26,12 @@ export interface SquadCharacterConfig {
   position: [number, number, number];
   /** Subtle inward facing Y angle in radians */
   rotationY: number;
+  /** Optional subtle X pitch tilt in radians (e.g. slight downward tilt for hovering Dragon) */
+  rotationX?: number;
+  /** Optional subtle Z bank tilt in radians */
+  rotationZ?: number;
+  /** Optional calm micro-hover for airborne characters */
+  floatingHover?: boolean;
   textureUrl: string;
   depthUrl: string;
   normalUrl: string;
@@ -46,6 +52,24 @@ export interface SquadCharacterConfig {
  * - Togepi:  1'0" (30.0 cm, seated snugly into Bitmoji's hair)
  */
 export const SQUAD_CHARACTERS: SquadCharacterConfig[] = [
+  {
+    id: 'dragon',
+    name: 'Dragon',
+    canonicalHeightCm: 225.4,
+    canonicalHeightLabel: `7'5"`,
+    // dragon.png (1122x801, aspect 1.4007): +15% larger (1.96 -> 2.254m) and elevated ~5% higher
+    meshWidthM: 3.157,
+    meshHeightM: 2.254,
+    soleOffsetM: 0,
+    position: [-1.54, 0.62, -0.48],
+    rotationY: 0.09,
+    rotationX: 0.09,
+    rotationZ: -0.04,
+    floatingHover: true,
+    textureUrl: '/characters/dragon.png?v=6',
+    depthUrl: '/characters/dragon_depth.png?v=6',
+    normalUrl: '/characters/dragon_normal.png?v=6',
+  },
   {
     id: 'mario',
     name: 'Mario',
@@ -147,14 +171,14 @@ export const SQUAD_CHARACTERS: SquadCharacterConfig[] = [
   {
     id: 'golem',
     name: 'Golem & Skeletons',
-    canonicalHeightCm: 212.0,
-    canonicalHeightLabel: `6'11"`,
-    // golem.png (901x887): rocky hunched back at ~2.12m, top skeleton skull reaching ~2.42m
-    meshWidthM: 2.533,
-    meshHeightM: 2.494,
-    soleOffsetM: -0.034,
+    canonicalHeightCm: 244.0,
+    canonicalHeightLabel: `8'0"`,
+    // golem.png (901x887): +15% larger (2.533 -> 2.913m wide, 2.494 -> 2.868m tall)
+    meshWidthM: 2.913,
+    meshHeightM: 2.868,
+    soleOffsetM: -0.039,
     // Positioned in 3D depth behind & to the right of Zenitsu so Zenitsu parallaxes cleanly in front!
-    position: [1.74, 0, -0.42],
+    position: [1.88, 0, -0.44],
     rotationY: -0.06,
     textureUrl: '/characters/golem.png',
     depthUrl: '/characters/golem_depth.png',
