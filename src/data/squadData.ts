@@ -138,11 +138,27 @@ export const SQUAD_CHARACTERS: SquadCharacterConfig[] = [
     meshWidthM: 0.839,
     meshHeightM: 1.684,
     soleOffsetM: -0.02,
-    position: [1.14, 0, -0.08],
-    rotationY: -0.09,
+    position: [1.14, 0, -0.04],
+    rotationY: -0.07,
     textureUrl: '/characters/zenitsu.png',
     depthUrl: '/characters/zenitsu_depth.png',
     normalUrl: '/characters/zenitsu_normal.png',
+  },
+  {
+    id: 'golem',
+    name: 'Golem & Skeletons',
+    canonicalHeightCm: 212.0,
+    canonicalHeightLabel: `6'11"`,
+    // golem.png (901x887): rocky hunched back at ~2.12m, top skeleton skull reaching ~2.42m
+    meshWidthM: 2.533,
+    meshHeightM: 2.494,
+    soleOffsetM: -0.034,
+    // Positioned in 3D depth behind & to the right of Zenitsu so Zenitsu parallaxes cleanly in front!
+    position: [1.74, 0, -0.42],
+    rotationY: -0.06,
+    textureUrl: '/characters/golem.png',
+    depthUrl: '/characters/golem_depth.png',
+    normalUrl: '/characters/golem_normal.png',
   },
 ];
 
