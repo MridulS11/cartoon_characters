@@ -131,10 +131,12 @@ export const Character3DMesh: React.FC<Character3DMeshProps> = ({ character }) =
   );
 
   const meshCenterY = character.meshHeightM * 0.5 + character.soleOffsetM;
+  const charOpacity = character.opacity ?? 1;
+  const isTranslucent = charOpacity < 1;
 
   useFrame((state) => {
     if (!character.floatingHover || !groupRef.current) return;
-    // Ultra-subtle, calm 1.2cm rigid hover for airborne Dragon (zero resizing, zero mesh bending)
+    // Ultra-subtle, calm 1.2cm rigid hover for airborne Dragon & Polterpup (zero resizing, zero mesh bending)
     groupRef.current.position.y =
       character.position[1] + Math.sin(state.clock.elapsedTime * 1.5) * 0.012;
   });
@@ -149,7 +151,7 @@ export const Character3DMesh: React.FC<Character3DMeshProps> = ({ character }) =
       <mesh
         position={[0, meshCenterY, 0]}
         customDepthMaterial={shadowDepthMaterial}
-        castShadow
+        castShadow={!isTranslucent}
       >
         <planeGeometry args={[character.meshWidthM, character.meshHeightM, 44, 64]} />
         <meshStandardMaterial
@@ -164,25 +166,29 @@ export const Character3DMesh: React.FC<Character3DMeshProps> = ({ character }) =
           emissiveIntensity={0.28}
           roughness={0.46}
           metalness={0.02}
-          alphaTest={0.35}
+          opacity={charOpacity}
+          alphaTest={isTranslucent ? 0.06 : 0.35}
+          depthWrite={!isTranslucent}
           transparent
           side={THREE.DoubleSide}
         />
       </mesh>
 
-      {/* Subtle 3D Extruded Vinyl Depth Rim for clean side-angle parallax */}
-      <mesh position={[0, meshCenterY, -0.016]}>
-        <planeGeometry args={[character.meshWidthM * 0.996, character.meshHeightM * 0.996, 16, 24]} />
-        <meshStandardMaterial
-          map={colorTex}
-          color="#e2e8f0"
-          roughness={0.7}
-          metalness={0.02}
-          alphaTest={0.4}
-          transparent
-          side={THREE.DoubleSide}
-        />
-      </mesh>
+      {/* Subtle 3D Extruded Vinyl Depth Rim for clean side-angle parallax (opaque characters only) */}
+      {!isTranslucent && (
+        <mesh position={[0, meshCenterY, -0.016]}>
+          <planeGeometry args={[character.meshWidthM * 0.996, character.meshHeightM * 0.996, 16, 24]} />
+          <meshStandardMaterial
+            map={colorTex}
+            color="#e2e8f0"
+            roughness={0.7}
+            metalness={0.02}
+            alphaTest={0.4}
+            transparent
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      )}
 
       {/* Rigid Articulated Waving Arm (Pikachu) */}
       {character.rigidArm && (

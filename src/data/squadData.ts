@@ -39,17 +39,22 @@ export interface SquadCharacterConfig {
   rigidArm?: RigidArmConfig;
   /** True when perched on Bitmoji's hair with a head-contact shadow */
   seatedOnHead?: boolean;
+  /** Optional translucency (0..1) for ghostly characters like Polterpup */
+  opacity?: number;
 }
 
 /**
  * 1 Three.js world unit = 1.000 meter.
  * Canonical lore heights (Bitmoji ~5'8"):
- * - Bitmoji: 5'8" (172.7 cm)
- * - Zenitsu: 5'4.8" (164.5 cm)
- * - Inosuke: 5'4.5" (164.0 cm, boar-head crown to sandals)
- * - Mario:   5'1" (155.0 cm)
- * - Pikachu: 1'4" (40.0 cm head crown to paws, waving by Bitmoji's foot)
- * - Togepi:  1'0" (30.0 cm, seated snugly into Bitmoji's hair)
+ * - El Primo:  7'2" (219.0 cm head crown, 235 cm cyan horn tip, heavyweight build)
+ * - Luigi:     5'9" (175.0 cm)
+ * - Bitmoji:   5'8" (172.7 cm)
+ * - Zenitsu:   5'4.8" (164.5 cm)
+ * - Inosuke:   5'4.5" (164.0 cm, boar-head crown to sandals)
+ * - Mario:     5'1" (155.0 cm)
+ * - Polterpup: 1'9" (52.8 cm, hovering translucent between & behind Mario and Luigi's legs)
+ * - Pikachu:   1'4" (40.0 cm head crown to paws, waving by Bitmoji's foot)
+ * - Togepi:    1'0" (30.0 cm, seated snugly into Bitmoji's hair)
  */
 export const SQUAD_CHARACTERS: SquadCharacterConfig[] = [
   {
@@ -71,6 +76,55 @@ export const SQUAD_CHARACTERS: SquadCharacterConfig[] = [
     normalUrl: '/characters/dragon_normal.png?v=6',
   },
   {
+    id: 'el_primo',
+    name: 'El Primo (El Dragón Rosado)',
+    canonicalHeightCm: 219.0,
+    canonicalHeightLabel: `7'2"`,
+    // el_primo.png (706x1024, aspect 0.6895): +10% larger (2.194 -> 2.413m)
+    meshWidthM: 1.663,
+    meshHeightM: 2.413,
+    soleOffsetM: -0.029,
+    // On the left, 13cm behind Luigi (z=-0.22) with clean subtle elbow overlap
+    position: [-3.65, 0, -0.35],
+    rotationY: 0.14,
+    textureUrl: '/characters/el_primo.png?v=1',
+    depthUrl: '/characters/el_primo_depth.png?v=1',
+    normalUrl: '/characters/el_primo_normal.png?v=1',
+  },
+  {
+    id: 'polterpup',
+    name: 'Polterpup',
+    canonicalHeightCm: 52.8,
+    canonicalHeightLabel: `1'9"`,
+    // polterpup.png (614x768, aspect 0.7995): +10% larger (0.4935 -> 0.543m) & subtly translucent
+    meshWidthM: 0.434,
+    meshHeightM: 0.543,
+    soleOffsetM: -0.007,
+    // Between Luigi (-2.72) & Mario (-1.88), and behind both Luigi (z=-0.22) & Mario (z=-0.10)!
+    position: [-2.3, 0.02, -0.32],
+    rotationY: 0.08,
+    floatingHover: true,
+    opacity: 0.76,
+    textureUrl: '/characters/polterpup.png?v=1',
+    depthUrl: '/characters/polterpup_depth.png?v=1',
+    normalUrl: '/characters/polterpup_normal.png?v=1',
+  },
+  {
+    id: 'luigi',
+    name: 'Luigi',
+    canonicalHeightCm: 175.0,
+    canonicalHeightLabel: `5'9"`,
+    // luigi.png (475x1024, aspect 0.4639): crown-to-sole = 0.975586 -> meshHeight = 1.750 / 0.975586 = 1.7938m
+    meshWidthM: 0.832,
+    meshHeightM: 1.794,
+    soleOffsetM: -0.021,
+    position: [-2.72, 0, -0.22],
+    rotationY: 0.12,
+    textureUrl: '/characters/luigi.png?v=1',
+    depthUrl: '/characters/luigi_depth.png?v=1',
+    normalUrl: '/characters/luigi_normal.png?v=1',
+  },
+  {
     id: 'mario',
     name: 'Mario',
     canonicalHeightCm: 155.0,
@@ -78,7 +132,7 @@ export const SQUAD_CHARACTERS: SquadCharacterConfig[] = [
     meshWidthM: 1.013,
     meshHeightM: 1.589,
     soleOffsetM: -0.02,
-    position: [-1.88, 0, -0.14],
+    position: [-1.88, 0, -0.1],
     rotationY: 0.1,
     textureUrl: '/characters/mario.png',
     depthUrl: '/characters/mario_depth.png',

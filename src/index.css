@@ -108,7 +108,7 @@ body {
 }
 
 .hero-stage-wrapper {
-  width: min(1340px, 100%);
+  width: min(1400px, 100%);
   height: clamp(460px, 68vh, 660px);
   margin: 0 auto;
 }
